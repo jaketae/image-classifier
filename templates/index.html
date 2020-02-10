@@ -1,1 +1,45 @@
-<p>Hello world</p>
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Welcome</title>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="jumbotron">
+                <h1>Upload Image</h1>
+                <p>Upload an image you want to classify from your local file directory. <a href="https://arxiv.org/abs/1704.04861">MobileNet</a>, a smart, lightweight convolutional neural network, will do its work behind the curtain and get back to you shortly with the results.</p>
+                <p>The image files must be of supported format: <code>.png</code>, <code>.jpg</code>, or <code>.jpeg</code>.</p>
+                <form action='/predict' method='post' enctype="multipart/form-data" id="form-node">
+                    <div class="custom-file">
+                        <input class="custom-file-input" type="file" name="image" id="customFile" onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])">
+                        <label class="custom-file-label" for="customFile">Choose File</label>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col">
+            <div class="text-center">
+                <img src="#" class="img-fluid rounded mx-auto d-block" alt="Responsive image" id="blah">
+                <input type="submit" form="form-node" value="Submit" class="btn btn-primary">
+            </div>
+        </div>
+    </div>
+</div> 
+
+
+<script>
+$(".custom-file-input").on("change", function() {
+    var fileName = $(this).val().split("\\").pop();
+    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
+</script>
+
+
+
+
+
+<!-- https://stackoverflow.com/questions/12368910/html-display-image-after-selecting-filename -->
+{% endblock %}

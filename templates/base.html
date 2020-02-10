@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+  
+  <nav class="navbar navbar-expand-lg navbar-fixed-top navbar-dark bg-primary">
+      <a class="navbar-brand" href="#">Image Predictor</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link active" href="/">Home</a>
+          <a class="nav-item nav-link" href="/">Upload</a>
+          <a class="nav-item nav-link" href="/predict">Predict</a>
+          <a class="nav-item nav-link" href="/about">About</a>
+        </div>
+      </div>
+    </nav>
+    
+    {% block body %}
+    {% endblock %}
+</body>
+</html>
