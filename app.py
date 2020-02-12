@@ -7,7 +7,9 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import numpy as np
 import base64
-
+import matplotlib.pyplot as plt
+plt.style.use('seaborn-whitegrid')
+plt.rcParams.update({'font.size': 12})
 
 
 MODEL = MobileNet(weights='imagenet', include_top=True)
@@ -33,16 +35,16 @@ def check_extension(file_name):
 
 def parse_prediction(predictions):
     pred_array = predictions[0]
-    label = [prediction[1] for prediction in pred_array]
+    label = [prediction[1].lower() for prediction in pred_array]
     estimate = [prediction[2] for prediction in pred_array]
     return label, estimate
 
 
 def create_plot(label, estimate):
-    fig = Figure()
-    axis = fig.add_subplot(1, 1, 1)
-    axis.bar(label, estimate)
     output = BytesIO()
+    fig = Figure(figsize=(16,9), dpi=300, tight_layout=True)
+    axis = fig.add_subplot(1, 1, 1)
+    axis.bar(label, estimate, color='#007bff')
     FigureCanvas(fig).print_png(output)
     image_string = "data:image/png;base64,"
     image_string += base64.b64encode(output.getvalue()).decode('utf8')
@@ -71,7 +73,7 @@ def predict():
          prediction = decode_predictions(prediction_array)
          label, estimate = parse_prediction(prediction)
          image_string = create_plot(label, estimate)
-         return render_template('predict.html', image=image_string)
+         return render_template('predict.html', image=image_string, label=label)
 
 
 @app.route('/error')
@@ -80,6 +82,3 @@ def error():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-# https://gitlab.com/snippets/1924163 How to deliver matplotlib to html
-# https://stackoverflow.com/questions/50728328/python-how-to-show-matplotlib-in-flask

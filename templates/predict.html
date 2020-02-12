@@ -4,5 +4,27 @@
 {% endblock %}
 
 {% block body %}
-<img src="{{ image }}"/>
+<div class="container">
+    <div class="row">
+        <div class="col-12 px-0">
+            <div class="pb-2 mt-4 mb-2 border-bottom">
+                <h1>Prediction</h1>
+            </div>
+            <p>The plot below lists the five most probable categories the subject in the image belongs to. MobileNet, the neural network used in this application, was trained to distinguish images belonging to a thousand different categories. If the image you posted does not belong to one of these categories, the prediction yielded by the model may be inaccurate.</p>
+            <p>The model predicts the following five classes to be the most probable: 
+                {% for class in label %}
+                    {% if class == label[4] %}
+                    <code>{{class}}</code>.
+                    {% else %}
+                    <code>{{class}}</code>, 
+                    {% endif %}
+                {% endfor %}
+            </p>
+            <img src="{{ image }}" class="img-fluid w-100" alt="Responsive image"/>
+        </div>
+    </div>
+</div>
+
+<!-- https://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+
 {% endblock %}
