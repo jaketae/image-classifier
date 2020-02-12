@@ -31,7 +31,7 @@ def preprocess_image(image, target_size):
 
 def check_extension(file_name):
     return '.' in file_name and \
-           file_name.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+           file_name.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 def parse_prediction(predictions):
@@ -75,13 +75,12 @@ def predict():
         return render_template('predict.html', image=image_string, label=label)
     
 
-@app.route('/about')
-def about():
-    return render_template('about.html')
 
 @app.route('/error')
 def error():
     return render_template('error.html')
+
+   
 
 if __name__ == "__main__":
     app.run(debug=True)
