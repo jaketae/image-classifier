@@ -43,7 +43,7 @@ def parse_prediction(predictions):
 
 def create_plot(label, estimate):
     output = BytesIO()
-    fig = Figure(figsize=(16,8), dpi=300, tight_layout=True)
+    fig = Figure(figsize=(16,10), dpi=300, tight_layout=True)
     axis = fig.add_subplot(1, 1, 1)
     axis.bar(label, estimate, color='#007bff')
     FigureCanvas(fig).print_png(output)
