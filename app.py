@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, redirect
 from PIL import Image
 from io import BytesIO
-from tensorflow.keras.applications.mobilenet import MobileNet, preprocess_input, decode_predictions
+from tensorflow.keras.applications.mobilenet import preprocess_input, decode_predictions
 from tensorflow.keras.preprocessing.image import img_to_array
+from tensorflow.keras.models import load_model
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import numpy as np
@@ -12,7 +13,7 @@ plt.style.use('seaborn-whitegrid')
 plt.rcParams.update({'font.size': 12})
 
 
-MODEL = MobileNet(weights='imagenet', include_top=True)
+MODEL = load_model('mobilenet.h5')
 IMAGE_WIDTH = 224
 IMAGE_HEIGHT = 224
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
@@ -42,7 +43,7 @@ def parse_prediction(predictions):
 
 def create_plot(label, estimate):
     output = BytesIO()
-    fig = Figure(figsize=(16,9), dpi=300, tight_layout=True)
+    fig = Figure(figsize=(16,8), dpi=300, tight_layout=True)
     axis = fig.add_subplot(1, 1, 1)
     axis.bar(label, estimate, color='#007bff')
     FigureCanvas(fig).print_png(output)
@@ -61,20 +62,22 @@ def index():
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    if 'image' not in request.files:
-        return redirect('/error')
     raw_image = request.files["image"]
     if not check_extension(raw_image.filename):
         return redirect('/error')
     else:
-         image = Image.open(BytesIO(raw_image.read()))
-         processed_image = preprocess_image(image, (IMAGE_WIDTH, IMAGE_HEIGHT))
-         prediction_array = MODEL.predict(processed_image)
-         prediction = decode_predictions(prediction_array)
-         label, estimate = parse_prediction(prediction)
-         image_string = create_plot(label, estimate)
-         return render_template('predict.html', image=image_string, label=label)
+        image = Image.open(BytesIO(raw_image.read()))
+        processed_image = preprocess_image(image, (IMAGE_WIDTH, IMAGE_HEIGHT))
+        prediction_array = MODEL.predict(processed_image)
+        prediction = decode_predictions(prediction_array)
+        label, estimate = parse_prediction(prediction)
+        image_string = create_plot(label, estimate)
+        return render_template('predict.html', image=image_string, label=label)
+    
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 @app.route('/error')
 def error():
